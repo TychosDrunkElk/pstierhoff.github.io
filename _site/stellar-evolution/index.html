@@ -1,0 +1,79 @@
+<html>
+  <head>
+    <title>
+       | Phoebe Stierhoff
+    </title>
+    <link rel="stylesheet" type="text/css" href="/css/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="/css/site.css">
+    <link rel="stylesheet" type="text/css" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css">
+    <script src="http://d3js.org/d3.v3.min.js"></script>
+    <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+    <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+    <script src="/js/d3_ischrones.js"></script>
+    <script src="/js/bootstrap.js"></script>
+  </head>
+  <body>
+    <header>
+      <h1>Phoebe Stierhoff</h1>
+    </header>
+    <nav class='navbar navbar-default'>
+      <div class="navbar-header">
+        <a class="navbar-brand" href="#">&#8857;</a>
+      </div>
+      <div class='navbar-collapse'>
+        <ul class='nav navbar-nav'>
+
+          <li><a href="/">home</a></li>
+          <li><a href="/about">about</a></li>
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">work <b class="caret"></b></a>
+            <ul class="dropdown-menu">
+              <li>
+                <a href="/stellar-evolution/">Stellar Evolution</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </nav>
+    <div id="content">
+      <div class="info">
+  <p>
+    A visual timeline of a stars size and temperature over it's lifetime up to the red giant stage. Use the slider to change the initial mass of the star. All stars begin with zero metalicity in ideal conditions.
+  </p>
+  <p class="source">
+    Marigo, P., L. Girardi, C. Chiosi, and P. R. Wood. "Zero-metallicity Stars. I. Evolution at Constant Mass." Astronomy and Astrophysics 371 (May 1, 2001): 152-173. doi:10.1051/0004-6361:20010309;
+  </p>
+</div>
+<div id="stellar-evolution">
+  <div id="slider-vertical" style="width: 250px;float: left; margin: 8px 0;"></div>
+  <span id="slider-value" style="float:left;margin:5px;padding-left:10px"></span>
+  <div id="isochrone-container"></div>
+  <script type="text/javascript">
+    var masses = ["0.7", "0.8", "0.9", "1.0", "1.1", "1.2", "1.3", "1.4", "1.5", "1.6", "1.7", "1.8", "1.9", "2.0", "2.1", "2.2", "2.3", "2.4", "2.5", "3.0", "4.0", "5.0", "6.0", "7.0", "8.0", "8.3", "9.0", "9.5", "10.0", "12.0", "15.0", "20.0", "30.0", "50.0", "70.0", "100.0"];
+    $.getJSON('/js/isochrones.json', function (data) {
+      stellarLife([data["sm-1.1"]["data"]], data["sm-1.1"]["temps"]);
+      $( "#slider-vertical" ).slider({
+        orientation: "horizontal",
+        range: "min",
+        min: 1,
+        max: 36,
+        step: 1,
+        value: 5,
+        slide: function( event, ui ) {
+          var mass = masses[ui.value - 1];
+          updateAll([data["sm-"+mass]["data"]], data["sm-"+mass]["temps"]);
+          $( "#slider-value" ).html(mass + " M&#8857;");
+        }
+      });
+      var value = $( "#slider-vertical" ).slider( "option", "value" );
+       $( "#slider-value" ).html(masses[value-1] + " M&#8857;");
+    });
+   </script>
+ </div>
+    </div>
+    <footer>
+      <!-- github contact -->
+    </footer>
+  </body>
+</html>
