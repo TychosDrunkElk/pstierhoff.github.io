@@ -10,6 +10,10 @@ header h1 {
 img {
   max-width: 100%;
 }
+
+ul.nav li.dropdown:hover > ul.dropdown-menu {
+    display: block;    
+}
 .info {
   padding-bottom: 20px;
 }
@@ -17,8 +21,17 @@ img {
   font-size: 32px;
   line-height: 16px;
 }
-ul.nav li.dropdown:hover > ul.dropdown-menu {
-    display: block;    
+.x-axis text {
+  font: 10px sans-serif;
+}
+.x-axis path,
+.x-axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+.x-axis text.x-label {
+  font-size: 14px;
 }
 .source {
   font-style: italic;
@@ -39,3 +52,6 @@ ul.nav li.dropdown:hover > ul.dropdown-menu {
   padding: 20px;
   border: 1px solid #ccc;
 }
+
+
+

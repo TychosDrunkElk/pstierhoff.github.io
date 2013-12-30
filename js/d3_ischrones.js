@@ -48,7 +48,7 @@ var initSVG = function(){
   d3.select("#isochrone-container").append("svg")
       .attr("width", 600)
       .attr("height", 30)
-      .attr("id", "temp-legend")
+      .attr("id", "temp-legend");
   // d3.select("#temp-legend").append("rect")
   //     .attr("fill", "url(#legend-temperature-gradient)")
   //     .attr("width", 600)
@@ -57,6 +57,19 @@ var initSVG = function(){
       .attr("width", width)
       .attr("height", height)
       .attr("id", "isochrone");
+  d3.select("#isochrone-container").append("svg")
+      .attr("width", 960)
+      .attr("height", 70)
+      .append('g')
+      .attr("class", "x-axis");
+
+  d3.select(".x-axis").append('text')
+        .attr("class", "x-label")
+        .attr("dx", 0)
+        .attr("dy", 30)
+        .attr("text-anchor", "end")
+        .text("Age in Years");
+
 }
 var initTempMap = function(){
   d3.select("#isochrone").append("linearGradient")
@@ -72,10 +85,13 @@ var initTempMap = function(){
 }
 var updateData = function(data) {
   var height = maxJsonProp(data[0], "radius")*4;
+  var max_age = maxJsonProp(data[0], "age");
   d3.select("#isochrone").attr("height", height);
-
   var x = d3.scale.linear()
       .domain([0, data[0].length - 1])
+      .range([0, 940]);
+  var age = d3.scale.linear()
+      .domain([0, max_age])
       .range([0, 940]);
 
   var y = d3.scale.ordinal()
@@ -87,18 +103,37 @@ var updateData = function(data) {
       .y0(function(d) { return -d.radius*2; })
       .y1(function(d) { return d.radius*2; });
 
-  
-  var data = d3.select("#isochrone").selectAll("path")
+  var path_data = d3.select("#isochrone").selectAll("path")
       .data(data);
 
-  data.enter().append("path")
+  var tick_values = [] 
+  for(var i=0; i<data[0].length; i+=20) {
+    tick_values.push(data[0][i]["age"]);
+  }
+  d3.select(".x-axis").transition()
+      .duration(500)
+      .attr("transform", "translate(0,20)")
+      .call(d3.svg.axis()
+              .scale(age)
+              .orient("bottom")
+              .ticks(10)
+              .tickSize(6,1)
+              .tickFormat(d3.format("3.3g")))
+            .selectAll("text")
+              .attr("y", 8)
+              .attr("x", 0)
+              .style("text-anchor", "start");
+
+  path_data.enter().append("path")
       .attr("transform", function(d, i) { return "translate(0," + y(i) + ")"; })
       .style("fill", "url(#temperature-gradient)")
       .attr("d", area);
-  data.transition()
+
+  path_data.transition()
       .duration(500)
       .attr("transform", function(d, i) { return "translate(0," + y(i) + ")"; })  
       .attr("d", area);
+
 }
 
 var stellarLife = function(data, temps) {
