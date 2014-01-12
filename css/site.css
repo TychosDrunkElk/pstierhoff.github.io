@@ -17,6 +17,11 @@ ul.nav li.dropdown:hover > ul.dropdown-menu {
 .info {
   padding-bottom: 20px;
 }
+.media {
+  padding-bottom: 16px;
+  border-bottom: 1px solid #CCC;
+  margin-bottom: 16px;
+}
 .navbar-brand {
   font-size: 32px;
   line-height: 16px;
@@ -38,6 +43,12 @@ ul.nav li.dropdown:hover > ul.dropdown-menu {
   width: 640px;
   font-size: 13px;
   color: #888;
+}
+.video-thumbnail {
+  width: 310px;
+  display: inline;
+  float: left;
+  margin-right: 16px;
 }
 #content {
   width: 1280px;
